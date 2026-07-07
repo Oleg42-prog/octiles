@@ -1,8 +1,10 @@
+import os
 import sys
 from octiles.commands import diff_command, eq_command, dedup_command, help_command
 
 
 def cmd():
+    os.system("")
     if len(sys.argv) < 2:
         help_command()
         return

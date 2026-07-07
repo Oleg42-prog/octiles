@@ -3,6 +3,20 @@ from dataclasses import dataclass
 from typing import Self
 
 
+COLORS = {
+    "red": "\033[91m",
+    "green": "\033[92m",
+    "yellow": "\033[93m",
+    "cyan": "\033[96m",
+    "magenta": "\033[95m",
+    "reset": "\033[0m",
+}
+
+
+def colored(text: str, color: str) -> str:
+    return f"{COLORS.get(color, '')}{text}{COLORS['reset']}"
+
+
 @dataclass
 class DiffResult:
     removed: list
@@ -12,17 +26,15 @@ class DiffResult:
 
     @classmethod
     def create_empty(cls) -> Self:
-        return cls(
-            removed=[],
-            new=[],
-            equals={},
-            unequals={}
-        )
+        return cls(removed=[], new=[], equals={}, unequals={})
 
     def __str__(self) -> str:
-        return self.pretty(verbose=False)
+        return self.pretty(color=True, verbose=False)
 
-    def pretty(self, verbose: bool = False, max_items: int = 10) -> str:
+    def pretty(self, color: bool = True, verbose: bool = False, max_items: int = 10) -> str:
+        def c(text: str, color_name: str) -> str:
+            return colored(text, color_name) if color else text
+
         def shorten_path(path: str) -> str:
             if verbose:
                 return path
@@ -30,38 +42,36 @@ class DiffResult:
             parent = os.path.basename(dirname)
             return os.path.join(parent, basename) if parent else basename
 
-        def format_list(lst: list, label: str, icon: str) -> str:
+        def format_list(lst: list, label: str, color_name: str, symbol: str) -> str:
             if not lst:
-                return f"{icon} {label} (0): (empty)"
-            lines = [f"{icon} {label} ({len(lst)}):"]
-            count = 0
-            for item in lst:
-                if count >= max_items:
-                    lines.append(f"  ... and {len(lst) - max_items} more")
+                return f"{c(symbol, color_name)} {c(label, color_name)} (0): {c('(пусто)', 'reset')}"
+            lines = [f"{c(symbol, color_name)} {c(label, color_name)} ({len(lst)}):"]
+            for idx, item in enumerate(lst):
+                if idx >= max_items:
+                    lines.append(f"  {c('... и ещё ' + str(len(lst) - max_items), 'reset')}")
                     break
-                lines.append(f"  - {shorten_path(item)}")
-                count += 1
+                lines.append(f"  {shorten_path(item)}")
             return "\n".join(lines)
 
-        def format_dict(dct: dict, label: str, icon: str) -> str:
+        def format_dict(dct: dict, label: str, color_name: str, symbol: str) -> str:
             if not dct:
-                return f"{icon} {label} (0): (empty)"
-            lines = [f"{icon} {label} ({len(dct)}):"]
-            count = 0
-            for key, (path_a, path_b) in dct.items():
-                if count >= max_items:
-                    lines.append(f"  ... and {len(dct) - max_items} more")
+                return f"{c(symbol, color_name)} {c(label, color_name)} (0): {c('(пусто)', 'reset')}"
+            lines = [f"{c(symbol, color_name)} {c(label, color_name)} ({len(dct)}):"]
+            for idx, (key, (path_a, path_b)) in enumerate(dct.items()):
+                if idx >= max_items:
+                    lines.append(f"  {c('... и ещё ' + str(len(dct) - max_items), 'reset')}")
                     break
                 lines.append(f"  {key} ->")
                 lines.append(f"    A: {shorten_path(path_a)}")
                 lines.append(f"    B: {shorten_path(path_b)}")
-                count += 1
             return "\n".join(lines)
 
         parts = [
-            format_list(self.removed, "Removed", "🗑️"),
-            format_list(self.new, "New", "✨"),
-            format_dict(self.equals, "Equals", "✅"),
-            format_dict(self.unequals, "Unequals", "❌"),
+            c("═══════════════════════════════════════════════════════════════════", "magenta"),
+            format_list(self.removed, "Удалены", "red", "-"),
+            format_list(self.new, "Новые", "green", "+"),
+            format_dict(self.equals, "Равны", "cyan", "="),
+            format_dict(self.unequals, "Различаются", "yellow", "≠"),
+            c("═══════════════════════════════════════════════════════════════════", "magenta"),
         ]
         return "\n".join(parts)
