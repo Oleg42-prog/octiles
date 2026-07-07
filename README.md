@@ -1,4 +1,4 @@
-# python-script-template
+# eq-files
 
 
 # Dev
