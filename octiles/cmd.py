@@ -2,20 +2,18 @@ import os
 import sys
 
 
-def parse_args() -> tuple[bool, str, str]:
-    is_args_valid = True
-    file_path_a = sys.argv[1]
-    file_path_b = sys.argv[2]
+def validate_paths(path_a: str, path_b: str) -> bool:
+    is_valid = True
 
-    if not os.path.exists(file_path_a):
-        is_args_valid = False
-        print(f'Path file_path_a is not exists: {file_path_a}')
+    if not os.path.exists(path_a):
+        is_valid = False
+        print(f'Path path_a is not exists: {path_a}')
 
-    if not os.path.exists(file_path_b):
-        is_args_valid = False
-        print(f'Path file_path_b is not exists: {file_path_b}')
+    if not os.path.exists(path_b):
+        is_valid = False
+        print(f'Path path_b is not exists: {path_b}')
 
-    return is_args_valid, file_path_a, file_path_b
+    return is_valid
 
 
 def is_eq_files(path_a: str, path_b: str) -> bool:
@@ -34,24 +32,22 @@ def dedup_files(path_a: str, path_b: str) -> bool:
 
 
 def eq_command(path_a: str, path_b: str):
-    is_args_valid, file_path_a, file_path_b = parse_args()
-    if not is_args_valid:
+    if not validate_paths(path_a, path_b):
         return
-    print(is_eq_files(file_path_a, file_path_b))
+    print(is_eq_files(path_a, path_b))
 
 
 def dedup_command(path_a: str, path_b: str):
-    is_args_valid, file_path_a, file_path_b = parse_args()
-    if not is_args_valid:
+    if not validate_paths(path_a, path_b):
         return
-    print(dedup_files(file_path_a, file_path_b))
+    print(dedup_files(path_a, path_b))
 
 
 def help_command():
     print('octiles <command> <arguments>')
     print('Command list:')
     print('\t- eq <file_path_a> <file_path_b>')
-    print('\t- dedup <path_a> <path_b>')
+    print('\t- dedup <file_path_a> <file_path_b>')
     print('\t- help')
 
 
