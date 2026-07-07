@@ -20,6 +20,8 @@ dependencies = [
 [project.scripts]
 eq-files = "eq_files.cmd:cmd_is_eq_files"
 dedup-files = "eq_files.cmd:cmd_dedup_files"
+diff-folders = "eq_files.cmd:cmd_diff_folders"
+dedup-folders = "eq_files.cmd:cmd_dedup_folders"
 
 [project.optional-dependencies]
 dev = [

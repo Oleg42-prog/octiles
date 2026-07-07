@@ -4,18 +4,46 @@ import sys
 
 def parse_args() -> tuple[bool, str, str]:
     is_args_valid = True
-    file_path_a = sys.argv[1]
-    file_path_b = sys.argv[2]
+    path_a = sys.argv[1]
+    path_b = sys.argv[2]
 
-    if not os.path.exists(file_path_a):
+    if not os.path.exists(path_a):
         is_args_valid = False
-        print(f'Path file_path_a is not exists: {file_path_a}')
+        print(f'Path path_a is not exists: {path_a}')
 
-    if not os.path.exists(file_path_b):
+    if not os.path.exists(path_b):
         is_args_valid = False
-        print(f'Path file_path_b is not exists: {file_path_b}')
+        print(f'Path path_b is not exists: {path_b}')
 
-    return is_args_valid, file_path_a, file_path_b
+    return is_args_valid, path_a, path_b
+
+
+def parse_args_files() -> tuple[bool, str, str]:
+    is_args_valid, path_a, path_b = parse_args()
+
+    if not os.path.isfile(path_a):
+        is_args_valid = False
+        print(f'Path path_a is not file: {path_a}')
+
+    if not os.path.isfile(path_b):
+        is_args_valid = False
+        print(f'Path path_b is not file: {path_b}')
+
+    return is_args_valid, path_a, path_b
+
+
+def parse_args_folders() -> tuple[bool, str, str]:
+    is_args_valid, path_a, path_b = parse_args()
+
+    if not os.path.isdir(path_a):
+        is_args_valid = False
+        print(f'Path path_a is not dir: {path_a}')
+
+    if not os.path.isdir(path_b):
+        is_args_valid = False
+        print(f'Path path_b is not dir: {path_b}')
+
+    return is_args_valid, path_a, path_b
 
 
 def is_eq_files(path_a: str, path_b: str) -> bool:
@@ -41,6 +69,13 @@ def cmd_is_eq_files():
 
 
 def cmd_dedup_files():
+    is_args_valid, file_path_a, file_path_b = parse_args()
+    if not is_args_valid:
+        return
+    print(dedup_files(file_path_a, file_path_b))
+
+
+def cmd_dedup_folders():
     is_args_valid, file_path_a, file_path_b = parse_args()
     if not is_args_valid:
         return
