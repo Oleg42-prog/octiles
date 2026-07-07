@@ -13,6 +13,8 @@ def eq_command(path_a: str, path_b: str):
 def dedup_command(path_a: str, path_b: str):
     if not validate_paths_exists(path_a, path_b):
         return
+    if not validate_paths_are_files(path_a, path_b):
+        return
     print(dedup_files(path_a, path_b))
 
 
