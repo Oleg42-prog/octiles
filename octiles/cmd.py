@@ -10,6 +10,6 @@ def cmd():
     command = sys.argv[1]
     arguments = sys.argv[2:]
     match command:
-        case 'dedup': dedup_command(*arguments)
         case 'eq': eq_command(*arguments)
+        case 'dedup': dedup_command(*arguments)
         case _: help_command()
