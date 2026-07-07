@@ -18,8 +18,7 @@ dependencies = [
 ]
 
 [project.scripts]
-template-add = "template_package.cmd:cmd_add"
-template-prod = "template_package.cmd:cmd_prod"
+eq-files = "eq_files.cmd:cmd_is_eq_files"
 
 [project.optional-dependencies]
 dev = [
@@ -28,7 +27,7 @@ dev = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["template_package*"]
+include = ["eq_files*"]
 
 [tool.setuptools.package-data]
 "*" = ["py.typed"]
