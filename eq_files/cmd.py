@@ -40,3 +40,12 @@ def cmd_is_eq_files():
 
     result = is_eq_files(file_path_a, file_path_b)
     print(result)
+
+
+def cmd_dedup_files():
+    is_args_valid, file_path_a, file_path_b = parse_args()
+    if not is_args_valid:
+        return
+
+    result = dedup_files(file_path_a, file_path_b)
+    print(result)
