@@ -25,6 +25,10 @@ def validate_paths_are_folders(path_a: str, path_b: str) -> bool:
     return validate_paths(os.path.isdir, path_a, path_b, 'not folder')
 
 
+def validate_paths_are_files(path_a: str, path_b: str) -> bool:
+    return validate_paths(os.path.isfile, path_a, path_b, 'not file')
+
+
 def is_eq_files(path_a: str, path_b: str) -> bool:
     with open(path_a, 'rb') as file_a:
         with open(path_b, 'rb') as file_b:
