@@ -68,10 +68,10 @@ class DiffResult:
 
         parts = [
             c("═══════════════════════════════════════════════════════════════════", "magenta"),
-            format_list(self.removed, "Удалены", "red", "-"),
-            format_list(self.new, "Новые", "green", "+"),
-            format_dict(self.equals, "Равны", "cyan", "="),
-            format_dict(self.unequals, "Различаются", "yellow", "≠"),
+            format_list(sorted(self.removed), "Удалены", "red", "-"),
+            format_list(sorted(self.new), "Новые", "green", "+"),
+            format_dict(dict(sorted(self.equals.items())), "Равны", "cyan", "="),
+            format_dict(dict(sorted(self.unequals.items())), "Различаются", "yellow", "≠"),
             c("═══════════════════════════════════════════════════════════════════", "magenta"),
         ]
         return "\n".join(parts)
